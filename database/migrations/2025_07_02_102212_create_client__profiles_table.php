@@ -12,15 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('client__profiles', function (Blueprint $table) {
+                        $table->id();
+
             $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('city')->nullable();
             $table->timestamps();
             $table->string('phone', 10)->unique();
-
+           
         });
     }
 
+
+
+
+    
     /**
      * Reverse the migrations.
      */
