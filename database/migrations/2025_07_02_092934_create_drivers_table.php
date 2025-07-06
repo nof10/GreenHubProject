@@ -15,13 +15,10 @@ return new class extends Migration
 
            $table->id();
             $table->string('face_id')->unique();
-            $table->string('national_id',10)->unique();
-            $table->unsignedBigInteger('vehical_id')->unique();
-            $table->string('name');
+            $table->timestamps();
+            
             $table->string('phone', 10)->unique();
-            $table->string('gender');
-            $table->string('email')->unique();
-            $table->string('status');
+            
         });
     }
 

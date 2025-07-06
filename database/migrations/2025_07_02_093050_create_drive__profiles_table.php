@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('drive__profiles', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->unsignedBigInteger('driver_id')->unique();
             $table->string('name');
             $table->string('email')->unique();
