@@ -52,10 +52,13 @@ class AppController extends Controller
             $user = Driver::firstOrCreate(['phone' => $request->phone]);
         }
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
             'message' => 'تم التحقق بنجاح',
             'user' => $user,
             'user_type' => $request->type,
+            'token' => $token,
         ]);
     }
 
