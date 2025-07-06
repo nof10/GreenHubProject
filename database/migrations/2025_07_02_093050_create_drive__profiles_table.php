@@ -17,9 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('driver_id')->unique();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('gender');
             $table->string('city');
-            $table->date('birth_date');
             $table->string('national_ID',10)->unique();
             $table->string('phone', 10)->unique();
             $table->string('documents');

@@ -12,9 +12,7 @@ class Drive_Profile extends Model
         'name',
         'email',
         "documents",
-        "gender",
         "city",
-        "birth_date",
        "national_ID",
          "phone"
 
