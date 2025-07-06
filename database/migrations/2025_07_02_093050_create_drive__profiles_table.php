@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('birth_date');
             $table->string('national_ID',10)->unique();
             $table->string('phone', 10)->unique();
-            $table->documents();
+            $table->string('documents');
         });
     }
 
