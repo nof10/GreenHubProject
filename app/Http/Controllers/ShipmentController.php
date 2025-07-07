@@ -50,4 +50,18 @@ class ShipmentController extends Controller
             'details' => $details,
         ], 201);
     }
+
+
+    public function destroy($id)
+    {
+        $shipment = Shipment::findOrFail($id);
+
+        // حذف التفاصيل أولاً
+        $shipment->details()->delete();
+
+        // حذف الشحنة
+        $shipment->delete();
+
+        return response()->json(['message' => 'تم حذف الشحنة بنجاح']);
+    }
 }
