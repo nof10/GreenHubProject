@@ -23,7 +23,7 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
-        $profile->update($request->only(['name', 'email', 'city', 'phone']));
+        $profile->updateOrCreat($request->only(['name', 'email', 'city', 'phone']));
 
     } elseif ($user->typeuser === 'driver') {
 
@@ -38,7 +38,7 @@ class ProfileController extends Controller
             'documents'     => 'nullable|string|max:255',
         ]);
 
-        $profile->update($request->only(['name', 'email', 'city', 'national_ID', 'phone', 'documents']));
+        $profile->updateOrCreate($request->only(['name', 'email', 'city', 'national_ID', 'phone', 'documents']));
 
     } else {
         return response()->json([
