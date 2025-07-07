@@ -19,13 +19,8 @@ class Driver extends Authenticatable implements AuthenticatableContract
      */
     protected $fillable = [
         'face_id',
-        'national_id',
-        'vehical_id',
-        'name',
-        'phone',
-        'gender',
-        'email',
-        'status',
+        'phone'
+       
     ];
 
     /**

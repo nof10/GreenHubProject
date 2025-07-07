@@ -22,6 +22,7 @@ class Client extends Authenticatable implements AuthenticatableContract
         'name',
         'phone',
         'city',
+        'typeuser',
     ];
 
     /**

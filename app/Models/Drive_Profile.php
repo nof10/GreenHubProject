@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Drive_Profile extends Model
 {
     //
+    protected $table = 'drive__profiles';
 
     protected $fillable = [
         'name',
