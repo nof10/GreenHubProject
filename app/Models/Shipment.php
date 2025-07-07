@@ -16,10 +16,8 @@ class Shipment extends Model
         'Driver_id',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
-    protected $hidden = [];
+    public function details()
+    {
+        return $this->hasOne(ShipmentDetails::class, 'shipment_id');
+    }
 }

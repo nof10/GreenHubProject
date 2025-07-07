@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('shipment_id'); 
             $table->unsignedBigInteger('driver_id'); 
-            $table->string('price');
+            $table->decimal('price');
             $table->string('status');
         });
     }
