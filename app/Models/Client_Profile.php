@@ -15,6 +15,7 @@ protected $fillable = [
         'email',
         'city',
         'phone',
+        'client_id'
     ];
 
 

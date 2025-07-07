@@ -47,9 +47,14 @@ class AppController extends Controller
         Cache::forget($key);
 
         if ($request->type === 'client') {
-            $user = Client::firstOrCreate(['phone' => $request->phone]);
+            $user = Client::firstOrCreate([
+                'phone' => $request->phone,
+                'typeuser' => $request->type
+        ]);
         } else {
-            $user = Driver::firstOrCreate(['phone' => $request->phone]);
+            $user = Driver::firstOrCreate(['phone' => $request->phone,
+            'typeuser' => $request->type
+        ]);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;

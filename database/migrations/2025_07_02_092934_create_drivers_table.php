@@ -16,7 +16,8 @@ return new class extends Migration
            $table->id();
             $table->string('face_id')->nullable();
             $table->timestamps();
-            
+            $table->string('typeuser')->nullable();
+
             $table->string('phone', 10)->unique();
             
         });

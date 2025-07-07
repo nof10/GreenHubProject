@@ -12,20 +12,20 @@ class ProfileController extends Controller
 {
     $user = auth()->user();
 
-    if ($user->typeuser === 'client') {
+        if ($user->typeuser === 'client') {
+            $validated = $request->validate([
+                'name'  => 'required|string|max:255',
+                'email' => 'required|email|unique:client__profiles,email,' . $user->id,
+                'city'  => 'nullable|string|max:100',
+                'phone' => 'nullable|string|max:20',
+            ]);
 
-        $profile = Client_Profile::where('client_id', $user->id)->firstOrFail();
-
-        $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|email|unique:client__profiles,email,' . $profile->id,
-            'city'  => 'nullable|string|max:100',
-            'phone' => 'nullable|string|max:20',
-        ]);
-
-        $profile->updateOrCreat($request->only(['name', 'email', 'city', 'phone']));
-
-    } elseif ($user->typeuser === 'driver') {
+        
+            $profile = Client_Profile::updateOrCreate(
+                ['client_id' => $user->id], 
+                $validated                   
+            );
+        } elseif ($user->typeuser === 'driver') {
 
         $profile = Drive_Profile::where('driver_id', $user->id)->firstOrFail();
 

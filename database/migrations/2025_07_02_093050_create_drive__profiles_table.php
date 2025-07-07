@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('drive__profiles', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('driver_id')->unique();
+            // $table->unsignedBigInteger('driver_id')->unique();
+            $table->unsignedBigInteger('driver_id'); 
+            $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('city')->nullable();
