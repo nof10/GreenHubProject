@@ -20,6 +20,7 @@ class Driver extends Authenticatable implements AuthenticatableContract
     protected $fillable = [
         'face_id',
         'phone'
+    
        
     ];
 
