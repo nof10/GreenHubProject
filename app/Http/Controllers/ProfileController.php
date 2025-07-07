@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Client;
 use App\Models\Driver;
+use App\Models\Drive_Profile;
+use App\Models\Client_Profile;
 ///home/u295987876/domains/sa-fvs.com/public_html/gh/app/Http/Controllers/AppController
-class AppController extends Controller
+class ProfileController extends Controller
 {
     public function updateProfile(Request $request)
 {
@@ -38,8 +40,8 @@ class AppController extends Controller
             ]);
 
             $profile = Drive_Profile::updateOrCreate(
-                ['driver_id' => $user->id], 
-                $validated                  
+                ['driver_id' => $user->id],  
+                $validated                   
             );
 
     } else {
