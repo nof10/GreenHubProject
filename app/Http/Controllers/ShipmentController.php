@@ -64,4 +64,17 @@ class ShipmentController extends Controller
 
         return response()->json(['message' => 'تم حذف الشحنة بنجاح']);
     }
+
+    public function listByStatus($status)
+{
+
+    $shipments = Shipment::with('details')
+        ->whereHas('details', function ($query) use ($status) {
+            $query->where('status', $status);
+        })
+        ->get();
+
+    return response()->json($shipments);
+}
+
 }

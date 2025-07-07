@@ -23,4 +23,9 @@ Route::prefix('shipments')->group(function () {
     Route::delete('/{id}', [ShipmentController::class, 'destroy']);
 });
 
+Route::prefix('shipments')->group(function () {
+    Route::get('/status/{status}', [ShipmentController::class, 'listByStatus']);
+});
+
+
 
