@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('shipments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('Client_id'); 
-            $table->unsignedBigInteger('Driver_id'); 
+            $table->unsignedBigInteger('Driver_id')->nullable(); 
+            $table->unsignedBigInteger('client_id'); 
         });
     }
 

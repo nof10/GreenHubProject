@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShipmentController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -15,4 +16,7 @@ Route::post('/verify-code', [AppController::class, 'verifyCode']);
 // Route::post('/logout', [AuthController::class, 'logout']); // إذا استخدمت JWT/Sanctum
 
 Route::middleware('auth:sanctum')->post('/profile', [ProfileController::class, 'updateProfile']);
+
+Route::post('/shipments', [ShipmentController::class, 'store']);
+
 
