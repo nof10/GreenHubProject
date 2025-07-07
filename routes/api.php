@@ -15,5 +15,4 @@ Route::post('/verify-code', [AppController::class, 'verifyCode']);
 // Route::post('/logout', [AuthController::class, 'logout']); // إذا استخدمت JWT/Sanctum
 
 Route::middleware('auth:sanctum')->put('/profile', [ProfileController::class, 'updateProfile']);
-Route::middleware('auth:sanctum')->put('/driver/update-profile', [ProfileController::class, 'updateDriverProfile']);
 

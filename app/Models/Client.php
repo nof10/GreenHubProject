@@ -19,9 +19,8 @@ class Client extends Authenticatable implements AuthenticatableContract
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+
         'phone',
-        'city',
         'typeuser',
     ];
 
