@@ -13,10 +13,17 @@ class ShipmentDetails extends Model
      */
     protected $fillable = [
         'shipment_id',
-        'item_name',
-        'quantity',
+        'type',
+        'size',
         'weight',
-        'dimensions',
+        'destination',
+        'address',
+        'scheduled_date',
+        'scheduled_time',
+        'status',
+        'is_immediate',
+        'payment_method',
+        'summary',
     ];
 
     /**
