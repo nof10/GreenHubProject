@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('driver_id')->unique();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('email')->unique();
-            $table->string('city');
+            $table->string('city')->nullable();
             $table->string('national_ID',10)->unique();
             $table->string('phone', 10)->unique();
-            $table->string('documents');
+            $table->string('documents')->nullable();
         });
     }
 
