@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('client__profiles', function (Blueprint $table) {
-                        $table->id();
+
+            $table->id();
 
             $table->string('name')->nullable();
             $table->string('email')->unique();

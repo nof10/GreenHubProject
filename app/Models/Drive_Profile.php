@@ -14,8 +14,10 @@ class Drive_Profile extends Model
         'email',
         "documents",
         "city",
-       "national_ID",
-         "phone"
+        "national_ID",
+         "phone",
+         'driver_id'
+
 
     ];
  

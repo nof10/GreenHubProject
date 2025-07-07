@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
            $table->id();
             $table->timestamps();
+            $table->string('typeuser')->nullable();
+
             $table->string('phone')->unique();
         }
         );
