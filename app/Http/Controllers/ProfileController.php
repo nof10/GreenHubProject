@@ -3,52 +3,74 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Client_Profile;
-use App\Models\Drive_Profile;
-
-class ProfileController extends Controller
+use Illuminate\Support\Facades\Cache;
+use App\Models\Client;
+use App\Models\Driver;
+///home/u295987876/domains/sa-fvs.com/public_html/gh/app/Http/Controllers/AppController
+class AppController extends Controller
 {
-    public function updateProfile(Request $request)
-{
-    $user = auth()->user();
-
-        if ($user->typeuser === 'client') {
-
-            $profile = Client_Profile::where('client_id', $user->id)->firstOrFail();
-
-            $request->validate([
-                'name'  => 'required|string|max:255',
-                'email' => 'required|email|unique:client__profiles,email,' . $profile->id,
-                'city'  => 'nullable|string|max:100',
-                'phone' => 'nullable|string|max:20',
-            ]);
-
-            $profile->update($request->only(['name', 'email', 'city', 'phone']));
-
-        } elseif ($user->typeuser === 'driver') {
-
-        $profile = Drive_Profile::where('driver_id', $user->id)->firstOrFail();
-
+    //
+    public function sendVerificationCode(Request $request)
+    {
         $request->validate([
-            'name'          => 'required|string|max:255',
-            'email'         => 'required|email|unique:drive__profiles,email,' . $profile->id,
-            'city'          => 'nullable|string|max:100',
-            'national_ID'   => 'nullable|string|size:10|unique:drive__profiles,national_ID,' . $profile->id,
-            'phone'         => 'nullable|string|max:20|unique:drive__profiles,phone,' . $profile->id,
-            'documents'     => 'nullable|string|max:255',
+            'phone' => 'required|string',
+            'type' => 'required|in:client,driver',
         ]);
 
-        $profile->updateOrCreate($request->only(['name', 'email', 'city', 'national_ID', 'phone', 'documents']));
+        $code = rand(1000, 9999);
+        $key = $request->type . '_' . $request->phone;
 
-    } else {
-        return response()->json([
-            'message' => 'نوع المستخدم غير مدعوم.',
-        ], 400);
+        Cache::put($key, $code, now()->addMinutes(5));
+
+        // SmsService::send($request->phone, "رمز التحقق الخاص بك هو: $code");
+
+        return response()->json(['message' => 'تم إرسال رمز التحقق بنجاح',
+                'code' => $code
+    ]);
     }
 
-    return response()->json([
-        'message' => 'تم تحديث البروفايل بنجاح.',
-        'profile' => $profile,
-    ]);
-}
+    public function verifyCode(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string',
+            'code' => 'required|digits:4',
+            'type' => 'required|in:client,driver',
+        ]);
+
+        $key = $request->type . '_' . $request->phone;
+        $storedCode = Cache::get($key);
+
+        if (!$storedCode || $storedCode != $request->code) {
+            return response()->json(['message' => 'رمز التحقق غير صحيح أو منتهي'], 401);
+        }
+
+        Cache::forget($key);
+
+        if ($request->type === 'client') {
+            $user = Client::firstOrCreate([
+                'phone' => $request->phone,
+                'typeuser' => $request->type
+        ]);
+        } else {
+            $user = Driver::firstOrCreate(['phone' => $request->phone,
+            'typeuser' => $request->type
+        ]);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'تم التحقق بنجاح',
+            'user' => $user,
+            'user_type' => $request->type,
+            'token' => $token,
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'تم تسجيل الخروج']);
+    }
 }
