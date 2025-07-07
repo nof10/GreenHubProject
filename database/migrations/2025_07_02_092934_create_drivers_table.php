@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('drivers', function (Blueprint $table) {
 
            $table->id();
-            $table->string('face_id')->unique();
+            $table->string('face_id')->nullable();
             $table->timestamps();
             
             $table->string('phone', 10)->unique();
