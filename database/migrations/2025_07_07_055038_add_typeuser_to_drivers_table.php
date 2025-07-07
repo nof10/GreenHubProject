@@ -6,17 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        Schema::table('drivers', function (Blueprint $table) {
-            $table->string('typeuser')->default('driver')->after('phone');
+        Schema::table('drive__profiles', function (Blueprint $table) {
+            if (!Schema::hasColumn('drive__profiles', 'driver_id')) {
+                $table->unsignedBigInteger('driver_id')->after('id');
+                $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
+            }
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::table('drivers', function (Blueprint $table) {
-            $table->dropColumn('typeuser');
+        Schema::table('drive__profiles', function (Blueprint $table) {
+            $table->dropForeign(['driver_id']);
+            $table->dropColumn('driver_id');
         });
     }
 };
