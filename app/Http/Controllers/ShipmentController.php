@@ -52,18 +52,18 @@ class ShipmentController extends Controller
     }
 
 
-    public function destroy($id)
-    {
+   public function destroy($id){
+        //اخذ بيانات الشحنة
         $shipment = Shipment::findOrFail($id);
-
-        // حذف التفاصيل أولاً
-        $shipment->details()->delete();
-
+        //تحقق من الاي دي
+        if ($shipment->client_id !== auth()->id()) {
+            return response()->json(['message' => 'غير مصرح لك بحذف هذه الشحنة'], 403);
+        }
         // حذف الشحنة
         $shipment->delete();
 
         return response()->json(['message' => 'تم حذف الشحنة بنجاح']);
-    }
+    } 
 
     public function listByStatus($status)
 {

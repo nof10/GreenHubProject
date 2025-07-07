@@ -19,7 +19,11 @@ Route::middleware('auth:sanctum')->post('/profile', [ProfileController::class, '
 
 Route::post('/shipments', [ShipmentController::class, 'store']);
 
-Route::prefix('shipments')->group(function () {
+//Route::prefix('shipments')->group(function () {
+    //Route::delete('/{id}', [ShipmentController::class, 'destroy']);
+//});
+
+Route::middleware('auth:sanctum')->prefix('shipments')->group(function () {
     Route::delete('/{id}', [ShipmentController::class, 'destroy']);
 });
 
