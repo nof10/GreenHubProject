@@ -27,18 +27,19 @@ class ProfileController extends Controller
             );
         } elseif ($user->typeuser === 'driver') {
 
-        $profile = Drive_Profile::where('driver_id', $user->id)->firstOrFail();
+            $validated = $request->validate([
+                'name'          => 'required|string|max:255',
+                'email'         => 'required|email|unique:drive__profiles,email,' . $user->id,
+                'city'          => 'nullable|string|max:100',
+                'national_ID'   => 'nullable|string|size:10|unique:drive__profiles,national_ID,' . $user->id,
+                'phone'         => 'nullable|string|max:20|unique:drive__profiles,phone,' . $user->id,
+                'documents'     => 'nullable|string|max:255',
+            ]);
 
-        $request->validate([
-            'name'          => 'required|string|max:255',
-            'email'         => 'required|email|unique:drive__profiles,email,' . $profile->id,
-            'city'          => 'nullable|string|max:100',
-            'national_ID'   => 'nullable|string|size:10|unique:drive__profiles,national_ID,' . $profile->id,
-            'phone'         => 'nullable|string|max:20|unique:drive__profiles,phone,' . $profile->id,
-            'documents'     => 'nullable|string|max:255',
-        ]);
-
-        $profile->updateOrCreate($request->only(['name', 'email', 'city', 'national_ID', 'phone', 'documents']));
+            $profile = Drive_Profile::updateOrCreate(
+                ['driver_id' => $user->id], 
+                $validated                  
+            );
 
     } else {
         return response()->json([

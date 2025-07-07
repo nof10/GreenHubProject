@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('drive__profiles', function (Blueprint $table) {
-            if (!Schema::hasColumn('drive__profiles', 'driver_id')) {
+        if (!Schema::hasColumn('drive__profiles', 'driver_id')) {
+            Schema::table('drive__profiles', function (Blueprint $table) {
                 $table->unsignedBigInteger('driver_id')->after('id');
                 $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
-            }
-        });
+            });
+        }
     }
 
     /**
