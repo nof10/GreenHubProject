@@ -6,26 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('favorate_dest', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->unsignedBigInteger('client_id'); 
-            $table->string('address');
-            $table->string('destination');
+        $table->id();
+        $table->unsignedBigInteger('client_id');
+        $table->string('destination');
+        $table->string('address');
+        $table->timestamps();
 
-        });
+        $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+    });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('favorate_dest');
     }
-};
+}; 
