@@ -18,6 +18,7 @@ class OffersController extends Controller
 
         // السائق الموثق بالتوكن
         $driver = auth('driver')->user();
+        $client = auth('client')->user();
 
         // تأكد أنه ما قدم عرض من قبل على نفس الشحنة
         $existingOffer = Offers::where('shipment_id', $request->shipment_id)
