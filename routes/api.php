@@ -31,4 +31,8 @@ Route::prefix('shipments')->group(function () {
 
 Route::post('/client/login', [AppController::class, 'login']);
 
-Route::middleware('auth:sanctum')->post('/favorite-destinations',[FavoriteDestinationController::class, 'store']); 
+Route::middleware('auth:sanctum')->post('/favorite-destinations',[FavoriteDestinationController::class, 'store']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/offers', [App\Http\Controllers\OffersController::class, 'store']);
+});
