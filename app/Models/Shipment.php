@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ShipmentDetails;
+use App\Models\Offers;
+
 
 class Shipment extends Model
 {
@@ -20,4 +23,10 @@ class Shipment extends Model
     {
         return $this->hasOne(ShipmentDetails::class, 'shipment_id');
     }
+
+    public function offers()
+    {
+    return $this->hasMany(Offers::class, 'shipment_id');
+    }
+
 }
