@@ -51,31 +51,17 @@ class ShipmentController extends Controller
         ], 201);
     }
 
-/*
-   public function destroy($id){
-        //اخذ بيانات الشحنة
-        $shipment = Shipment::findOrFail($id);
-        //تحقق من الاي دي
-        if ($shipment->client_id !== auth()->id()) {
-            return response()->json(['message' => 'غير مصرح لك بحذف هذه الشحنة'], 403);
-        }
-        // حذف الشحنة
-        $shipment->delete();
-
-        return response()->json(['message' => 'تم حذف الشحنة بنجاح']);
-    } */
-
     public function destroy($id){
     $shipment = Shipment::with('details')->findOrFail($id);
 
-    // تحقق من هوية العميل
+
     if ($shipment->client_id !== auth('client')->id()) {
         return response()->json(['message' => 'غير مصرح لك بحذف هذه الشحنة'], 403);
     }
 
     $details = $shipment->details;
 
-    // تحقق من حالة الشحنة
+
     if (
         $details->status !== 'قيد الانتظار' &&
         !($details->status === 'قيد التنفيذ' && $details->is_immediate == false)
@@ -83,13 +69,11 @@ class ShipmentController extends Controller
         return response()->json(['message' => 'لا يمكن حذف هذه الشحنة في حالتها الحالية'], 403);
     }
 
-    // حذف التفاصيل ثم الشحنة
     $details->delete();
     $shipment->delete();
 
     return response()->json(['message' => 'تم حذف الشحنة بنجاح']);
 }
-
 
     public function listByStatus($status)
 {

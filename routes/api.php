@@ -13,15 +13,12 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/send-code', [AppController::class, 'sendVerificationCode']);
 Route::post('/verify-code', [AppController::class, 'verifyCode']);
-// Route::post('/logout', [AuthController::class, 'logout']); // إذا استخدمت JWT/Sanctum
+Route::post('/logout', [AuthController::class, 'logout']); 
 
 Route::middleware('auth:sanctum')->post('/profile', [ProfileController::class, 'updateProfile']);
 
 Route::post('/shipments', [ShipmentController::class, 'store']);
 
-//Route::prefix('shipments')->group(function () {
-    //Route::delete('/{id}', [ShipmentController::class, 'destroy']);
-//});
 
 Route::middleware('auth:sanctum')->prefix('shipments')->group(function () {
     Route::delete('/{id}', [ShipmentController::class, 'destroy']);

@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class favorate_dest extends Model
 {
-    //
+    protected $fillable = [
+        'destination',
+        'address',
+    ];
 }
