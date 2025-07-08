@@ -55,7 +55,7 @@ class ShipmentController extends Controller
     $shipment = Shipment::with('details')->findOrFail($id);
 
 
-    if ($shipment->client_id !== auth('client')->id()) {
+    if ($shipment->Client_id !== auth('client')->id()) {
         return response()->json(['message' => 'غير مصرح لك بحذف هذه الشحنة'], 403);
     }
 
