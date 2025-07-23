@@ -3,74 +3,76 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Client;
 use App\Models\Driver;
-///home/u295987876/domains/sa-fvs.com/public_html/gh/app/Http/Controllers/AppController
+
 class AppController extends Controller
 {
-    //
     public function sendVerificationCode(Request $request)
     {
-        $request->validate([
-            'phone' => 'required|string',
-            'type' => 'required|in:client,driver',
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required|string',
+            'user_type' => 'required|in:client,driver',
         ]);
 
-        $code = rand(1000, 9999);
-        $key = $request->type . '_' . $request->phone;
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
-        Cache::put($key, $code, now()->addMinutes(5));
+        // رمز التحقق الثابت (للتجربة)
+        $verificationCode = "123456";
 
-        // SmsService::send($request->phone, "رمز التحقق الخاص بك هو: $code");
-
-        return response()->json(['message' => 'تم إرسال رمز التحقق بنجاح',
-                'code' => $code
-    ]);
+        return response()->json([
+            'status' => true,
+            'code' => $verificationCode,
+            'user_type' => $request->user_type
+        ]);
     }
 
     public function verifyCode(Request $request)
     {
-        $request->validate([
-            'phone' => 'required|string',
-            'code' => 'required|digits:4',
-            'type' => 'required|in:client,driver',
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required|string',
+            'code' => 'required|string|size:6',
+            'user_type' => 'required|in:client,driver',
         ]);
 
-        $key = $request->type . '_' . $request->phone;
-        $storedCode = Cache::get($key);
-
-        if (!$storedCode || $storedCode != $request->code) {
-            return response()->json(['message' => 'رمز التحقق غير صحيح أو منتهي'], 401);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        Cache::forget($key);
+        if ($request->code !== "123456") {
+            return response()->json([
+                'status' => false,
+                'message' => 'رمز التحقق غير صحيح',
+            ]);
+        }
 
-        if ($request->type === 'client') {
-            $user = Client::firstOrCreate([
-                'phone' => $request->phone,
-                'typeuser' => $request->type
-        ]);
+        if ($request->user_type === 'client') {
+            $user = Client::firstOrCreate(
+                ['phone' => $request->phone_number],
+                ['typeuser' => 'client']
+            );
         } else {
-            $user = Driver::firstOrCreate(['phone' => $request->phone,
-            'typeuser' => $request->type
-        ]);
+            $user = Driver::firstOrCreate(
+                ['phone' => $request->phone_number],
+                ['typeuser' => 'driver', 'face_id' => null]
+            );
         }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'message' => 'تم التحقق بنجاح',
-            'user' => $user,
-            'user_type' => $request->type,
-            'token' => $token,
+            'status' => true,
+            'message' => 'تم التحقق والتسجيل بنجاح',
+            'user' => $user
         ]);
-    }
-
-    public function logout(Request $request)
-    {
-
-        $request->user()->tokens()->delete();
-        return response()->json(['message' => 'تم تسجيل الخروج']);
     }
 }
