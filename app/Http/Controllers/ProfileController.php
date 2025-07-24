@@ -18,7 +18,6 @@ class ProfileController extends Controller
         if ($user->typeuser === 'client') {
             $validated = $request->validate([
                 'name'  => 'required|string|max:255',
-                'email' => 'required|email|unique:client__profiles,email,' . $user->id,
                 'city'  => 'nullable|string|max:100',
                 'phone' => 'nullable|string|max:20',
             ]);
@@ -37,6 +36,7 @@ class ProfileController extends Controller
                 'national_ID'   => 'nullable|string|size:10|unique:drive__profiles,national_ID,' . $user->id,
                 'phone'         => 'nullable|string|max:20|unique:drive__profiles,phone,' . $user->id,
                 'documents'     => 'nullable|string|max:255',
+                'birth_date'    => 'nullable|date',
             ]);
 
             $profile = Drive_Profile::updateOrCreate(

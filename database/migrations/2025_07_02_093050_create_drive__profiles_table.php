@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('national_ID',10)->unique();
             $table->string('phone', 10)->unique();
             $table->string('documents')->nullable();
+            $table->date('birth_date')->nullable();
         });
     }
 
