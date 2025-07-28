@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('city')->nullable();
-            $table->string('national_ID',10)->unique();
-            $table->string('phone', 10)->unique();
+            $table->string('national_ID')->unique();
+            $table->string('phone')->unique();
             $table->string('documents')->nullable();
             $table->date('birth_date')->nullable();
         });
