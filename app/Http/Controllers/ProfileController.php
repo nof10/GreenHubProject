@@ -27,6 +27,11 @@ class ProfileController extends Controller
                 ['client_id' => $user->id], 
                 $validated                   
             );
+
+            // لتحديث رقم الجوال في جدول العميل
+            $user->phone = $request->phone;
+            $user->save();
+
         } elseif ($user->typeuser === 'driver') {
 
             $validated = $request->validate([
@@ -43,6 +48,9 @@ class ProfileController extends Controller
                 ['driver_id' => $user->id],  
                 $validated                   
             );
+            // لتحديث رقم الجوال في جدول السائق 
+            $user->phone = $request->phone;
+            $user->save();
 
     } else {
         return response()->json([
