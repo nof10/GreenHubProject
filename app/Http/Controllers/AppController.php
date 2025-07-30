@@ -75,6 +75,7 @@ class AppController extends Controller
         'status' => true,
         'message' => 'تم التحقق والتسجيل بنجاح',
         'token' => $token, // رجّع التوكن
+        'client_id' => $user->id,
         'user' => $user,
     ]);
 }

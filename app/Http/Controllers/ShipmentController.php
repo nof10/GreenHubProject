@@ -22,7 +22,7 @@ class ShipmentController extends Controller
             'scheduled_time' => 'nullable|string',
             'status' => 'nullable|string',
             'is_immediate' => 'boolean',
-            'payment_method' => 'required|string',
+            'payment_method' => 'nullable|string',
         ]);
 
         $shipment = Shipment::create([
@@ -42,7 +42,7 @@ class ShipmentController extends Controller
             'scheduled_time' => $validated['scheduled_time'] ?? null,
             'status' => $validated['status'] ?? 'pending',
             'is_immediate' => $validated['is_immediate'] ?? true,
-            'payment_method' => $validated['payment_method'],
+            'payment_method' => $validated['payment_method'] ?? null,
         ]);
 
         return response()->json([
