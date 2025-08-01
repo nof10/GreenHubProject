@@ -41,10 +41,11 @@ class ShipmentController extends Controller
             'address' => $validated['address'],
             'scheduled_date' => $validated['scheduled_date'] ?? null,
             'scheduled_time' => $validated['scheduled_time'] ?? null,
-            'status' => $validated['status'] ?? 'pending',
+            'status' => 'قيد الانتظار', // ✅ تجاهل أي status من الطلب وثبتها يدويًا
             'is_immediate' => $validated['is_immediate'] ?? true,
             'payment_method' => $validated['payment_method'] ?? null,
         ]);
+
 
         return response()->json([
             'shipment' => $shipment,
