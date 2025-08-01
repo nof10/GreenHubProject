@@ -25,5 +25,10 @@ class Offers extends Model
     return $this->belongsTo(Driver::class, 'driver_id');
     }
 
+    public function offers()
+{
+    return $this->hasMany(Offers::class, 'driver_id');
+}
+
 
 }

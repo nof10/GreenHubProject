@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Shipment;
 use App\Models\ShipmentDetails;
+use Illuminate\Support\Facades\Log;
 
 class ShipmentController extends Controller
 {
@@ -75,16 +76,70 @@ class ShipmentController extends Controller
     return response()->json(['message' => 'تم حذف الشحنة بنجاح']);
 }
 
-    public function listByStatus($status)
+public function listByStatus($status)
 {
-
-    $shipments = Shipment::with('details')
+    $shipments = Shipment::with(['details', 'offers.driver']) // ✅ جلب التفاصيل والعروض مع السائق
         ->whereHas('details', function ($query) use ($status) {
             $query->where('status', $status);
         })
+        ->where('Client_id', auth('client')->id()) // ✅ فقط الشحنات الخاصة بالعميل الحالي
         ->get();
 
     return response()->json($shipments);
 }
+
+
+
+public function getPendingShipments()
+{
+    $shipments = Shipment::with(['details', 'offers.driver']) // جلب التفاصيل والعروض مع السائق
+        ->whereHas('details', function ($query) {
+            $query->where('status', 'قيد الانتظار');
+        })
+        ->where('Client_id', auth('client')->id()) 
+        ->get();
+
+    return response()->json($shipments);
+}
+
+
+public function pastShipments(Request $request)
+{
+    $user = $request->user();
+
+    if (!$user) {
+        Log::warning('Unauthenticated request to pastShipments API.');
+        return response()->json(['message' => 'Unauthenticated'], 401);
+    }
+
+    $shipments = Shipment::where('client_id', $user->id)
+        ->whereHas('details', function ($query) {
+            $query->where('status', 'تم التسليم');
+        })
+        ->with('details')
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    Log::info('Past shipments for user ' . $user->id . ': ' . $shipments->toJson());
+
+    return response()->json($shipments);
+}
+
+
+
+public function presentShipments()
+{
+    $user = auth('client')->user();
+
+    $shipments = Shipment::where('Client_id', $user->id)
+        ->whereHas('details', function ($query) {
+            $query->where('status', 'قيد التنفيذ'); // ✅ استخدم where عادية
+        })
+        ->with(['details', 'offers.driver'])
+        ->get();
+
+    return response()->json($shipments);
+}
+
 
 }

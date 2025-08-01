@@ -13,6 +13,9 @@ Route::post('/send-code', [AppController::class, 'sendVerificationCode']);
 Route::post('/verify-code', [AppController::class, 'verifyCode']); 
 Route::post('/client/login', [AppController::class, 'login']); 
 Route::post('/logout', [AuthController::class, 'logout']); 
+Route::get('/pending-shipments', [ShipmentController::class, 'getPendingShipments']);
+Route::middleware('auth:sanctum')->get('/past-shipments', [ShipmentController::class, 'pastShipments']);
+Route::get('/present-shipments', [ShipmentController::class, 'presentShipments']);
 Route::middleware('auth:sanctum')->group(function () { 
     Route::post('/profile', [ProfileController::class, 'updateProfile']); 
     Route::post('/favorite-destinations', [FavoriteDestinationController::class, 'store']); 
