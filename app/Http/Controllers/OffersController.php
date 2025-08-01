@@ -54,26 +54,38 @@ class OffersController extends Controller
     ]);
     }
 
-    public function acceptOffer($offerId)
-    {
-    $offer = Offers::findOrFail($offerId);
+ public function acceptOffer(Request $request)
+{
+    $request->validate([
+        'offer_id' => 'required|exists:offers,id',
+    ]);
+
+    $offer = Offers::findOrFail($request->offer_id);
     $shipment = $offer->shipment;
 
-    if ($shipment->Client_id !== auth('client')->id()) {
+    //\Log::info('Client ID (auth): ' . auth('client')->id());
+    //\Log::info('Shipment Client ID: ' . $shipment->client_id);
+    //\Log::info('Shipment full data: ' . json_encode($shipment));
+
+    if ($shipment->client_id !== auth('client')->id()) {
         return response()->json(['message' => 'غير مصرح لك بالموافقة على هذا العرض'], 403);
     }
 
     $offer->status = 'accepted';
     $offer->save();
-    // رفض جميع العروض الأخرى على نفس الشحنة
+
     Offers::where('shipment_id', $shipment->id)
         ->where('id', '!=', $offer->id)
         ->update(['status' => 'rejected']);
-    // تحديث حالة الشحنة
+
     $shipment->Driver_id = $offer->driver_id;
+    $shipment->details->status ='قيد التنفيذ';
+    $shipment->details->save();
     $shipment->save();
 
     return response()->json(['message' => 'تم قبول العرض بنجاح']);
 }
+
+
 
 }

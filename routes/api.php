@@ -16,6 +16,8 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/pending-shipments', [ShipmentController::class, 'getPendingShipments']);
 Route::middleware('auth:sanctum')->get('/past-shipments', [ShipmentController::class, 'pastShipments']);
 Route::get('/present-shipments', [ShipmentController::class, 'presentShipments']);
+Route::middleware('auth:client')->group(function () {
+Route::post('/accept-offer', [OffersController::class, 'acceptOffer']);});
 Route::middleware('auth:sanctum')->group(function () { 
     Route::post('/profile', [ProfileController::class, 'updateProfile']); 
     Route::post('/favorite-destinations', [FavoriteDestinationController::class, 'store']); 
@@ -24,7 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/shipments/status/{status}', [ShipmentController::class, 'listByStatus']); 
     Route::post('/offers', [OffersController::class, 'store']); 
     Route::get('/shipments/{id}/offers', [OffersController::class, 'showOffersForShipment']); 
-    Route::post('/offers/{id}/accept', [OffersController::class, 'acceptOffer']); });
+    //Route::post('/offers/{id}/accept', [OffersController::class, 'acceptOffer']);
+ });
 
 
 
