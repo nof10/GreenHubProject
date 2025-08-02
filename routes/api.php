@@ -29,5 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     //Route::post('/offers/{id}/accept', [OffersController::class, 'acceptOffer']);
  });
 
+//for driver 
+Route::middleware('auth:driver')->get('/driver/new-orders', [ShipmentController::class, 'newOrdersForDriver']);
+Route::middleware('auth:driver')->get('/shipments/{id}', [ShipmentController::class, 'show']);
 
 

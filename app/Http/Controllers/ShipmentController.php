@@ -142,5 +142,29 @@ public function presentShipments()
     return response()->json($shipments);
 }
 
+//ALL for driver 
+public function newOrdersForDriver()
+{
+    $shipments = Shipment::with('details')
+        ->whereNull('Driver_id') // لم تُعين لسائق بعد
+        ->whereHas('details', function ($query) {
+            $query->where('status', 'قيد الانتظار');
+        })
+        ->get();
+
+    return response()->json($shipments);
+}
+
+public function show($id)
+{
+    $shipment = Shipment::with('details')->find($id);
+
+    if (!$shipment) {
+        return response()->json(['message' => 'الشحنة غير موجودة'], 404);
+    }
+
+    return response()->json($shipment);
+}
+
 
 }
